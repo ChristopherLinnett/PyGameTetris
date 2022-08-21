@@ -9,13 +9,13 @@ def loop():
     black = 0, 0, 0
 
     screen = pygame.display.set_mode(size)
+    clock = pygame.time.Clock()
 
     ball = pygame.image.load("intro_ball.gif")
     ballrect = ball.get_rect()
-
     time = 0
 
-    while time<100000:
+    while time<300:
         for event in pygame.event.get():
             if event.type == pygame.QUIT: sys.exit()
 
@@ -29,3 +29,6 @@ def loop():
         screen.blit(ball, ballrect)
         pygame.display.flip()
         time+=1
+        if time%10 == 0:
+            print(time)
+        clock.tick(60)
