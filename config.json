@@ -1,5 +1,5 @@
 {
-    "screenSize": {"width": 640, "height": 480},
+    "screenSize": {"width": 1280, "height": 720},
     "extendedMode": false,
     "audioEnabled": true,
     "aiMode": false

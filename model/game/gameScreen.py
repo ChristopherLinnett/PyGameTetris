@@ -1,10 +1,10 @@
 import sys, pygame
-
+import json
 
 def loop():
     pygame.init()
-
-    size = width, height = 600, 400
+    config = json.load(open('config.json'))
+    size = width, height = config['screenSize']['width'], config['screenSize']['height']
     speed = [2, 2]
     black = 0, 0, 0
 

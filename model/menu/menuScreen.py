@@ -1,28 +1,31 @@
 import pygame
 import pygame_menu
 import model.game.gameScreen as gameScreen
+import model.menu.configureScreen as configureScreen
 import json
 
 f = open('config.json')
 config = json.load(f)
-print(config)
+
 def gameLaunched():
     pygame.init()
     surface = pygame.display.set_mode((config['screenSize']['width'], config['screenSize']['height']))
 
-    def set_difficulty(value, difficulty):
-        # Do the job here !
+    def showSettings():
+        configureScreen.showConfigScreen()
         pass
 
     def start_the_game():
-        # Do the job here !
         gameScreen.loop()
 
-    menu = pygame_menu.Menu('Welcome', 400, 300, theme=pygame_menu.themes.THEME_BLUE)
+    def showHighScores():
+        pass
 
-    menu.add.text_input('Name :', default='John Doe')
-    menu.add.selector('Difficulty :', [('Hard', 1), ('Easy', 2)], onchange=set_difficulty)
+    menu = pygame_menu.Menu(title='2022 3815ICT', width=surface.get_width(), height=surface.get_height())
+    menu.add.image(image_path="assets/tetrisTitle.png",scale=(0.2,0.2))
     menu.add.button('Play', start_the_game)
+    menu.add.button('High Scores', showHighScores)
+    menu.add.button('Settings', showSettings)
     menu.add.button('Quit', pygame_menu.events.EXIT)
-
+    menu.add.label(title="Christopher Linnett, Lachlan Manson, Duwon Ha")
     menu.mainloop(surface)
