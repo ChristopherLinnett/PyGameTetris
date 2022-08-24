@@ -2,24 +2,25 @@ import pygame
 import pygame_menu
 import model.game.gameScreen as gameScreen
 import model.menu.configureScreen as configureScreen
+import model.menu.topScoreScreen as highScoreScreen
 import json
 
-f = open('config.json')
-config = json.load(f)
+
 
 def gameLaunched():
+    f = open('config.json')
+    config = json.load(f)
     pygame.init()
     surface = pygame.display.set_mode((config['screenSize']['width'], config['screenSize']['height']))
 
     def showSettings():
         configureScreen.showConfigScreen()
-        pass
 
     def start_the_game():
         gameScreen.loop()
 
     def showHighScores():
-        pass
+        highScoreScreen.showTopScores()
 
     menu = pygame_menu.Menu(title='2022 3815ICT', width=surface.get_width(), height=surface.get_height())
     menu.add.image(image_path="assets/tetrisTitle.png",scale=(0.2,0.2))
