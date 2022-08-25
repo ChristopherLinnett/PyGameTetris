@@ -17,9 +17,9 @@ def showTopScores():
         menuScreen.gameLaunched()
 
     menu = pygame_menu.Menu(title='High Scores', width=surface.get_width(), height=surface.get_height())
-    names = topScores.keys()
+    names = list(topScores.keys())
     for user in names:
-        menu.add.label(f'{user}       {topScores[user]}')
+        menu.add.label(f'{names.index(user)+1}    {user}       {topScores[user]}')
     menu.add.label(" ")
     menu.add.button('Back', goBack)
     menu.mainloop(surface)
