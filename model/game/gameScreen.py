@@ -1,7 +1,11 @@
 import sys, pygame
 import json
+import model.game.main as playGame
 
-def loop():
+def loop(width, height):
+    playGame.runGame(width, height)
+
+def loopTest():
     pygame.init()
     config = json.load(open('config.json'))
     size = width, height = config['screenSize']['width'], config['screenSize']['height']

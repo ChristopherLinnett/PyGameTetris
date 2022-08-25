@@ -17,7 +17,7 @@ def gameLaunched():
         configureScreen.showConfigScreen()
 
     def start_the_game():
-        gameScreen.loop()
+        gameScreen.loop(config['screenSize']['width'], config['screenSize']['height'])
 
     def showHighScores():
         highScoreScreen.showTopScores()
