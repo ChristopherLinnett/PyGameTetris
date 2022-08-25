@@ -1,5 +1,8 @@
 
-def runGame(width, height):
+import sys
+
+
+def runGame(windowSize, playSize):
     import pygame
     import random
     """
@@ -11,13 +14,13 @@ def runGame(width, height):
     pygame.font.init()
 
     # GLOBALS VARS
-    s_width = width
-    s_height = height
+    s_width = windowSize[0]
+    s_height = windowSize[1]
     play_width = 300  # meaning 300 // 10 = 30 width per block
     play_height = 600  # meaning 600 // 20 = 20 height per block
-    block_size = play_width//10
+    block_size = (play_width if (play_width<play_height) else play_height)//10
 
-    top_left_x = (s_width - play_width) // 2
+    top_left_x = (s_width - play_width)//2
     top_left_y = s_height - play_height
 
 
@@ -205,9 +208,10 @@ def runGame(width, height):
     def draw_window(surface, grid):
         surface.fill((0,0,0))
         pygame.font.init()
-        font = pygame.font.SysFont('comicsans', 60)
+        font = pygame.font.SysFont('arial', 60)
         label = font.render('Tetris', 1, (255,255,255))
         surface.blit(label, (top_left_x+play_width/2 - label.get_width()//2, 30))
+
         for i in range(len(grid)):
             for j in range(len(grid[i])):
                 pygame.draw.rect(surface, grid[i][j], (top_left_x+j*block_size, top_left_y+i*block_size, block_size, block_size), 0) #Draw blocks
@@ -230,6 +234,7 @@ def runGame(width, height):
         fall_speed = 0.27
 
         while run:
+
             grid = create_grid(locked_positions)
             fall_time += clock.get_rawtime() 
             clock.tick()
@@ -243,7 +248,8 @@ def runGame(width, height):
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    run = False
+                    pygame.quit()
+                    sys.exit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_LEFT:
                         current_piece.x -= 1

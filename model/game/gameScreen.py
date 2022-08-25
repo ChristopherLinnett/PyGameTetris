@@ -2,8 +2,8 @@ import sys, pygame
 import json
 import model.game.main as playGame
 
-def loop(width, height):
-    playGame.runGame(width, height)
+def loop(windowSize, playSize):
+    playGame.runGame(windowSize, playSize)
 
 def loopTest():
     pygame.init()
