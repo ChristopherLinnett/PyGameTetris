@@ -38,10 +38,11 @@ def showConfigScreen():
     menu = pygame_menu.Menu(title='Main Menu', width=surface.get_width(), height=surface.get_height())
     # Adding a slider to the menu.
     menu.add.label("Screen Width")
-    menu.add.label("Game Level")
+    menu.add.label("Screen Height")
+
+    menu.add.range_slider(title="Starting Level", increment=1,default=1, range_values=(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20))
     menu.add.label("Normal/Extended")
     menu.add.label("Player/AI")
-    menu.add.label("Screen Height")
     menu.add.label(" ")
     menu.add.button("Apply", saveChanges)
     menu.add.button('Back', back)
