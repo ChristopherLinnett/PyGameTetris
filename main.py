@@ -1,3 +1,3 @@
-import model.menu.menuScreen as menuScreen
+import view.menu.menuScreen as menuScreen
 
 menuScreen.gameLaunched()

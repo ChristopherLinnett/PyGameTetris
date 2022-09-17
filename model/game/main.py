@@ -1,4 +1,4 @@
-import model.menu.menuScreen as menuScreen
+import view.menu.menuScreen as menuScreen
 import sys
 from tkinter import *
 from tkinter import messagebox
@@ -12,7 +12,7 @@ def runGame(windowSize, playSize):
     shapes: S, Z, I, O, J, L, T
     represented in order by 0 - 6
     """
-    import model.menu.topScoreScreen as topScoreScreen
+    import view.menu.topScoreScreen as topScoreScreen
     pygame.font.init()
 
     # GLOBALS VARS

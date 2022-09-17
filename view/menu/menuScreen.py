@@ -1,8 +1,8 @@
 import pygame
 import pygame_menu
-import model.game.gameScreen as gameScreen
-import model.menu.configureScreen as configureScreen
-import model.menu.topScoreScreen as highScoreScreen
+import view.gameScreen as gameScreen
+import view.menu.configureScreen as configureScreen
+import view.menu.topScoreScreen as highScoreScreen
 import json
 
 
