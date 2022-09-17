@@ -2,7 +2,7 @@ from email.mime import audio
 import pygame
 import pygame_menu
 import json
-import model.menu.menuScreen as menuScreen
+import view.menu.menuScreen as menuScreen
 
 
 def showConfigScreen():

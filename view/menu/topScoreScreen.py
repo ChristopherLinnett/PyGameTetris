@@ -1,6 +1,6 @@
 import pygame
 import pygame_menu
-import model.menu.menuScreen as menuScreen
+import view.menu.menuScreen as menuScreen
 import json
 
 
