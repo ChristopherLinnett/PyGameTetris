@@ -3,7 +3,7 @@ import pygame_menu
 class ConfigScreen:
     def __init__(self, controller):
         
-        self.menu = pygame_menu.Menu(title='Settings', width=controller.surface.get_width(), height=controller.surface.get_height())
+        self.menu = pygame_menu.Menu(title='Settings', width=controller.surface.get_width(), height=controller.surface.get_height(), theme=pygame_menu.themes.THEME_DARK)
         widthInput = self.menu.add.text_input(title="Play Width: ", input_type='input-int', maxchar=4, onchange=controller.setPlayWidth)
         widthInput.set_value(controller.config['screenSize']['width'])
         
