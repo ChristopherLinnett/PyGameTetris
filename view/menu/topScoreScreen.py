@@ -6,8 +6,8 @@ import json
 
 
 def showTopScores():
-    scores = open('highscores.json')
-    with open('config.json') as f:
+    scores = open('data/highscores.json')
+    with open('data/config.json') as f:
         config = json.load(f)
     topScores = json.load(scores)
     pygame.init()

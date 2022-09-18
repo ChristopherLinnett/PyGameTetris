@@ -8,7 +8,7 @@ import json
 
 
 def gameLaunched():
-    f = open('config.json')
+    f = open('data/config.json')
     config = json.load(f)
     pygame.init()
     surface = pygame.display.set_mode((config['screenSize']['width'], config['screenSize']['height']))
