@@ -33,10 +33,10 @@ def showConfigScreen():
         showConfigScreen()
 
     menu = pygame_menu.Menu(title='Settings', width=surface.get_width(), height=surface.get_height())
-    widthInput = menu.add.text_input(title="Play Width: ", input_type='input-int', maxchar=4, onreturn=setPlayWidth)
+    widthInput = menu.add.text_input(title="Play Width: ", input_type='input-int', maxchar=4, onchange=setPlayWidth)
     widthInput.set_value(config['screenSize']['width'])
     
-    heightInput = menu.add.text_input(title="Play Height: ", input_type='input-int', maxchar=4, onreturn=setPlayHeight)
+    heightInput = menu.add.text_input(title="Play Height: ", input_type='input-int', maxchar=4, onchange=setPlayHeight)
     heightInput.set_value(config['screenSize']['height'])
 
     menu.add.range_slider(title="Starting Level", increment=1,default=1, range_values=(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20),range_text_value_enabled=False,)
