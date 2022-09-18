@@ -1,61 +1,29 @@
-import pygame
 import pygame_menu
-import view.menu.menuScreen as menuScreen
-import controller.menu.menuController as menuController
 
+class ConfigScreen:
+    def __init__(self, controller):
+        
+        self.menu = pygame_menu.Menu(title='Settings', width=controller.surface.get_width(), height=controller.surface.get_height())
+        widthInput = self.menu.add.text_input(title="Play Width: ", input_type='input-int', maxchar=4, onchange=controller.setPlayWidth)
+        widthInput.set_value(controller.config['screenSize']['width'])
+        
+        heightInput = self.menu.add.text_input(title="Play Height: ", input_type='input-int', maxchar=4, onchange=controller.setPlayHeight)
+        heightInput.set_value(controller.config['screenSize']['height'])
 
-def showConfigScreen():
-    pygame.init()
-    config = menuController.getConfig()
-    newConfig = config
-    surface = pygame.display.set_mode((config['screenSize']['width'], config['screenSize']['height']))
+        startingLevelInput = self.menu.add.range_slider(title="Starting Level", increment=1,default=1, range_values=(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20),range_text_value_enabled=False, onchange=controller.setStartingLevel)
+        startingLevelInput.set_value(controller.config['startingLevel'])
 
-    def back():
-        menuScreen.gameLaunched()
+        extendedModeInput = self.menu.add.toggle_switch(title='Extended Mode', state_values=tuple((False, True)), state_text=tuple(("Off", "On")), onchange=controller.setExtendedMode)
+        extendedModeInput.set_default_value(controller.config['extendedMode'])
 
-    def setExtendedMode(value):
-        newConfig['extendedMode'] = value
-    
-    def setAIMode(value):
-        newConfig['aiMode'] = value
-    
-    def setStartingLevel(value):
-        newConfig['startingLevel'] = value
-    
-    def setPlayWidth(value):
-        newConfig['screenSize']['width'] = value
-    
-    def setPlayHeight(value):
-        newConfig['screenSize']['height'] = value
-    
-    def setAudioEnabled(value):
-        newConfig['audioEnabled'] = value
-    
-    def saveNewConfig():
-        menuController.saveConfig(newConfig)
-        showConfigScreen()
+        aiModeInput = self.menu.add.toggle_switch(title='AI Mode', state_values=tuple((False, True)), state_text=tuple(("Off", "On")), onchange=controller.setAIMode)
+        aiModeInput.set_default_value(controller.config['aiMode'])
 
-    menu = pygame_menu.Menu(title='Settings', width=surface.get_width(), height=surface.get_height())
-    widthInput = menu.add.text_input(title="Play Width: ", input_type='input-int', maxchar=4, onchange=setPlayWidth)
-    widthInput.set_value(config['screenSize']['width'])
-    
-    heightInput = menu.add.text_input(title="Play Height: ", input_type='input-int', maxchar=4, onchange=setPlayHeight)
-    heightInput.set_value(config['screenSize']['height'])
+        audioInput= self.menu.add.toggle_switch(title='Audio', state_values=tuple((False, True)), state_text=tuple(("Off", "On")), onchange=controller.setAudioEnabled)
+        audioInput.set_default_value(controller.config['audioEnabled'])
 
-    startingLevelInput = menu.add.range_slider(title="Starting Level", increment=1,default=1, range_values=(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20),range_text_value_enabled=False, onchange=setStartingLevel)
-    startingLevelInput.set_value(config['startingLevel'])
+        self.menu.add.label(" ")
+        self.menu.add.button("Save", controller.saveNewConfig)
+        self.menu.add.button('Back', controller.goToMainMenu)
 
-    extendedModeInput = menu.add.toggle_switch(title='Extended Mode', state_values=tuple((False, True)), state_text=tuple(("Off", "On")), onchange=setExtendedMode)
-    extendedModeInput.set_default_value(config['extendedMode'])
-
-    aiModeInput = menu.add.toggle_switch(title='AI Mode', state_values=tuple((False, True)), state_text=tuple(("Off", "On")), onchange=setAIMode)
-    aiModeInput.set_default_value(config['aiMode'])
-
-    audioInput= menu.add.toggle_switch(title='Audio', state_values=tuple((False, True)), state_text=tuple(("Off", "On")), onchange=setAudioEnabled)
-    audioInput.set_default_value(config['audioEnabled'])
-
-    menu.add.label(" ")
-    menu.add.button("Save", saveNewConfig)
-    menu.add.button('Back', back)
-
-    menu.mainloop(surface)
+        self.menu.mainloop(controller.surface)

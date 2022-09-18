@@ -1,3 +1,3 @@
-import view.menu.menuScreen as menuScreen
+from controller.menu.menuController import MenuController
 
-menuScreen.gameLaunched()
+game = MenuController()

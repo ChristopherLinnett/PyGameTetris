@@ -7,3 +7,6 @@ with open('data/config.json') as configFile:
 def saveConfig(newConfig):
     with open('data/config.json', 'w') as configFile:
         json.dump(newConfig, configFile)
+
+def getConfig():
+    return config
