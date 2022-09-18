@@ -1,3 +1,5 @@
-import view.menu.menuScreen as menuScreen
+from controller.menu.menuController import menuController
+from view.menu.menuScreen import MainMenu
 
-menuScreen.gameLaunched()
+menuControllerObj = menuController()
+MainMenu = MainMenu(surface = menuControllerObj.surface, controller = menuControllerObj)

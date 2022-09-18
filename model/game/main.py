@@ -1,4 +1,3 @@
-import view.menu.menuScreen as menuScreen
 import sys
 from tkinter import *
 from tkinter import messagebox
@@ -34,7 +33,11 @@ def runGame(windowSize, playSize):
     def showPopUpBox():
         boxResponse = messagebox.askyesno(title="Exit Game?",message="Are you sure you want to quit")
         if boxResponse == True:
-            menuScreen.gameLaunched()
+            from view.menu.menuScreen import MainMenu
+            from controller.menu.menuController import menuController
+            menuControllerObj = menuController()
+            surface = pygame.display.set_mode((menuControllerObj.config['screenSize']['width'], menuControllerObj.config['screenSize']['height']))
+            MainMenu = MainMenu(surface=surface, controller = menuControllerObj)
 
     def valid_space(tetronomo, playField):
         accepted_pos = [[(j,i) for j in range(10) if playField[i][j]== (0,0,0)] for i in range(20)]
