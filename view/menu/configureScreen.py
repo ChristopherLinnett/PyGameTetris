@@ -1,50 +1,57 @@
-from email.mime import audio
 import pygame
 import pygame_menu
-import json
 import view.menu.menuScreen as menuScreen
+import controller.menu.menuController as menuController
 
 
 def showConfigScreen():
-    with open('config.json') as f:
-        config = json.load(f)
     pygame.init()
+    config = menuController.getConfig()
+    newConfig = config
     surface = pygame.display.set_mode((config['screenSize']['width'], config['screenSize']['height']))
-    screenWidth = config['screenSize']['width']
-    screenHeight = config['screenSize']['height']
-    aiMode = config['aiMode']
-    extendedMode = config['extendedMode']
-    audioEnabled = config['audioEnabled']
-
-    def changeScreenSlider(newValue):
-        pass
 
     def back():
         menuScreen.gameLaunched()
- 
 
-    def saveChanges():
-        newConfig = { "screenSize": {"width": int(int(config['screenSize']['width'])*0.9), "height": int(int(config['screenSize']['height'])*0.9)},
-            "extendedMode": extendedMode, 
-            "audioEnabled": audioEnabled,
-            "aiMode": aiMode }
-
-        with open('config.json', 'w') as file:
-            json.dump(newConfig, file)
+    def setExtendedMode(value):
+        newConfig['extendedMode'] = value
+    
+    def setAIMode(value):
+        newConfig['aiMode'] = value
+    
+    def setPlayWidth(value):
+        newConfig['screenSize']['width'] = value
+    
+    def setPlayHeight(value):
+        newConfig['screenSize']['height'] = value
+    
+    def setAudioEnabled(value):
+        newConfig['audioEnabled'] = value
+    
+    def saveNewConfig():
+        menuController.saveConfig(newConfig)
         showConfigScreen()
 
-        
-
     menu = pygame_menu.Menu(title='Settings', width=surface.get_width(), height=surface.get_height())
-    # Adding a slider to the menu.
-    menu.add.text_input("Play Width     ")
-    menu.add.text_input("Play Height    ")
+    widthInput = menu.add.text_input(title="Play Width: ", input_type='input-int', maxchar=4, onreturn=setPlayWidth)
+    widthInput.set_value(config['screenSize']['width'])
+    
+    heightInput = menu.add.text_input(title="Play Height: ", input_type='input-int', maxchar=4, onreturn=setPlayHeight)
+    heightInput.set_value(config['screenSize']['height'])
+
     menu.add.range_slider(title="Starting Level", increment=1,default=1, range_values=(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20),range_text_value_enabled=False,)
-    menu.add.selector(title="Extended Mode", items=["Y", "N"])
-    menu.add.selector(title="AI Mode", items=["Y", "N"])
+
+    extendedModeInput = menu.add.toggle_switch(title='Extended Mode', state_values=tuple((False, True)), state_text=tuple(("Off", "On")), onchange=setExtendedMode)
+    extendedModeInput.set_default_value(config['extendedMode'])
+
+    aiModeInput = menu.add.toggle_switch(title='AI Mode', state_values=tuple((False, True)), state_text=tuple(("Off", "On")), onchange=setAIMode)
+    aiModeInput.set_default_value(config['aiMode'])
+
+    audioInput= menu.add.toggle_switch(title='Audio', state_values=tuple((False, True)), state_text=tuple(("Off", "On")), onchange=setAudioEnabled)
+    audioInput.set_default_value(config['audioEnabled'])
 
     menu.add.label(" ")
-    menu.add.button("Save", saveChanges)
+    menu.add.button("Save", saveNewConfig)
     menu.add.button('Back', back)
 
     menu.mainloop(surface)

@@ -1,15 +1,14 @@
 import pygame
 import pygame_menu
 import view.menu.menuScreen as menuScreen
-import json
+import controller.menu.highscoreController as highscore
+import controller.menu.menuController as menuController
 
 
 
 def showTopScores():
-    scores = open('highscores.json')
-    with open('config.json') as f:
-        config = json.load(f)
-    topScores = json.load(scores)
+    topScores = highscore.getHighscores()
+    config = menuController.getConfig()
     pygame.init()
     surface = pygame.display.set_mode((config['screenSize']['width'], config['screenSize']['height']))
 
