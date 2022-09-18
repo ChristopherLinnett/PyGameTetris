@@ -2,7 +2,8 @@ import view.menu.menuScreen as menuScreen
 import sys
 from tkinter import *
 from tkinter import messagebox
-
+from model.game.tetronomo import Tetronomo
+import model.game.shapesData as sd
 
 def runGame(windowSize, playSize):
     import pygame
@@ -27,120 +28,7 @@ def runGame(windowSize, playSize):
 
     # SHAPE FORMATS
 
-    S = [['.....',
-        '......',
-        '..00..',
-        '.00...',
-        '.....'],
-        ['.....',
-        '..0..',
-        '..00.',
-        '...0.',
-        '.....']]
-
-    Z = [['.....',
-        '.....',
-        '.00..',
-        '..00.',
-        '.....'],
-        ['.....',
-        '..0..',
-        '.00..',
-        '.0...',
-        '.....']]
-
-    I = [['..0..',
-        '..0..',
-        '..0..',
-        '..0..',
-        '.....'],
-        ['.....',
-        '0000.',
-        '.....',
-        '.....',
-        '.....']]
-
-    O = [['.....',
-        '.....',
-        '.00..',
-        '.00..',
-        '.....']]
-
-    J = [['.....',
-        '.0...',
-        '.000.',
-        '.....',
-        '.....'],
-        ['.....',
-        '..00.',
-        '..0..',
-        '..0..',
-        '.....'],
-        ['.....',
-        '.....',
-        '.000.',
-        '...0.',
-        '.....'],
-        ['.....',
-        '..0..',
-        '..0..',
-        '.00..',
-        '.....']]
-
-    L = [['.....',
-        '...0.',
-        '.000.',
-        '.....',
-        '.....'],
-        ['.....',
-        '..0..',
-        '..0..',
-        '..00.',
-        '.....'],
-        ['.....',
-        '.....',
-        '.000.',
-        '.0...',
-        '.....'],
-        ['.....',
-        '.00..',
-        '..0..',
-        '..0..',
-        '.....']]
-
-    T = [['.....',
-        '..0..',
-        '.000.',
-        '.....',
-        '.....'],
-        ['.....',
-        '..0..',
-        '..00.',
-        '..0..',
-        '.....'],
-        ['.....',
-        '.....',
-        '.000.',
-        '..0..',
-        '.....'],
-        ['.....',
-        '..0..',
-        '.00..',
-        '..0..',
-        '.....']]
-
-    shapes = [S, Z, I, O, J, L, T]
-    shape_colours = [(0, 255, 0), (255, 0, 0), (0, 255, 255), (255, 255, 0), (255, 165, 0), (0, 0, 255), (128, 0, 128)]
     # index 0 - 6 represent shape
-
-
-    class Piece(object):
-        def __init__(self,x , y, shape):
-            self.x = x
-            self.y = y
-            self.shape = shape
-            self.colour = shape_colours[shapes.index(shape)]
-            self.rotation = 0
 
     def showPopUpBox():
         boxResponse = messagebox.askyesno(title="Exit Game?",message="Are you sure you want to quit")
@@ -157,25 +45,11 @@ def runGame(windowSize, playSize):
                     grid[i][j] = c
         return grid
 
-    def convert_shape_format(shape):
-        positions = []
-        format = shape.shape[shape.rotation % len(shape.shape)]
-
-        for i, line in enumerate(format):
-            row = list(line)
-            for j, column in enumerate(row):
-                if column == '0':
-                    positions.append((shape.x + j, shape.y + i))
-        for i, pos in enumerate(positions):
-            positions[i] = (pos[0]-2, pos[1]-4)
-
-        return positions
-
-    def valid_space(shape, grid):
+    def valid_space(tetronomo, grid):
         accepted_pos = [[(j,i) for j in range(10) if grid[i][j]== (0,0,0)] for i in range(20)]
         accepted_pos = [j for sub in accepted_pos for j in sub]
 
-        formatted = convert_shape_format(shape)
+        formatted = tetronomo.convert_shape_format()
 
         for pos in formatted:
             if pos not in accepted_pos:
@@ -189,9 +63,6 @@ def runGame(windowSize, playSize):
             if y < 1:
                 return True
         return False
-
-    def get_shape():
-        return Piece(5,0, random.choice(shapes))
 
     def draw_text_middle(text, size, color, surface):  
         pass
@@ -208,19 +79,19 @@ def runGame(windowSize, playSize):
     def clear_rows(grid, locked):
         pass
 
-    def draw_next_shape(shape, surface):
+    def draw_preview_tetronomo(tetronomo, surface):
         font = pygame.font.SysFont('arial', 30)
         label = font.render("Next Shape", 1, (255,255,255))
 
         sx = top_left_x + play_width +50
         sy = top_left_y + play_height/2-100
-        format = shape.shape[shape.rotation % len(shape.shape)]
+        format = tetronomo.shape[tetronomo.rotation % len(tetronomo.shape)]
 
         for i, line in enumerate(format):
             row = list(line)
             for j, column in enumerate(row):
                 if column == '0':
-                    pygame.draw.rect(surface, shape.colour, (sx+j*block_size, sy+i*block_size, block_size, block_size),0)
+                    pygame.draw.rect(surface, tetronomo.colour, (sx+j*block_size, sy+i*block_size, block_size, block_size),0)
         surface.blit(label, (sx+10, sy-30))
 
     def draw_window(surface, grid):
@@ -255,8 +126,8 @@ def runGame(windowSize, playSize):
 
         change_piece = False
         run = True
-        current_piece = get_shape()
-        next_piece = get_shape()
+        current_tetronomo = Tetronomo(5,0,random.choice(sd.shapes))
+        preview_tetronomo = Tetronomo(5,0,random.choice(sd.shapes))
         clock = pygame.time.Clock()
         fall_time = 0
         fall_speed = 0.27
@@ -270,9 +141,9 @@ def runGame(windowSize, playSize):
 
             if fall_time/1000 > fall_speed:
                 fall_time = 0
-                current_piece.y += 1
-                if not(valid_space(current_piece, grid)) and current_piece.y > 0:
-                    current_piece.y -= 1
+                current_tetronomo.y += 1
+                if not(valid_space(current_tetronomo, grid)) and current_tetronomo.y > 0:
+                    current_tetronomo.y -= 1
                     change_piece = True
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -282,40 +153,40 @@ def runGame(windowSize, playSize):
                 if pause == False:
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_LEFT:
-                            current_piece.x -= 1
-                            if not(valid_space(current_piece, grid)):
-                                current_piece.x+=1
+                            current_tetronomo.x -= 1
+                            if not(valid_space(current_tetronomo, grid)):
+                                current_tetronomo.x+=1
                         if event.key == pygame.K_RIGHT:
-                            current_piece.x += 1
-                            if not(valid_space(current_piece, grid)):
-                                current_piece.x-=1
+                            current_tetronomo.x += 1
+                            if not(valid_space(current_tetronomo, grid)):
+                                current_tetronomo.x-=1
                         if event.key == pygame.K_DOWN:
-                            current_piece.y += 1
-                            if not(valid_space(current_piece, grid)):
-                                current_piece.y-=1
+                            current_tetronomo.y += 1
+                            if not(valid_space(current_tetronomo, grid)):
+                                current_tetronomo.y-=1
                         if event.key == pygame.K_UP:
-                            current_piece.rotation += 1
-                            if not(valid_space(current_piece, grid)):
-                                current_piece.rotation-=1
+                            current_tetronomo.rotation += 1
+                            if not(valid_space(current_tetronomo, grid)):
+                                current_tetronomo.rotation-=1
                         if event.key == pygame.K_ESCAPE:
                             pause = True
                             showPopUpBox()
                             pause = False
-            shape_pos = convert_shape_format(current_piece)
+            shape_pos = current_tetronomo.convert_shape_format()
             for i in range(len(shape_pos)):
                 x,y = shape_pos[i]
                 if y > -1:
-                    grid[y][x] = current_piece.colour
+                    grid[y][x] = current_tetronomo.colour
 
             if change_piece:
                 for pos in shape_pos:
                     p = (pos[0], pos[1])
-                    locked_positions[p] = current_piece.colour
-                current_piece = next_piece
-                next_piece = get_shape()
+                    locked_positions[p] = current_tetronomo.colour
+                current_tetronomo = preview_tetronomo
+                preview_tetronomo.new_random_shape()
                 change_piece = False
             draw_window(win,grid)
-            draw_next_shape(next_piece, win)
+            draw_preview_tetronomo(preview_tetronomo, win)
             pygame.display.update()
 
             if check_lost(locked_positions):
