@@ -4,6 +4,7 @@ from tkinter import *
 from tkinter import messagebox
 from model.game.tetronomo import Tetronomo
 import model.game.shapesData as sd
+from model.game.grid import PlayField
 
 def runGame(windowSize, playSize):
     import pygame
@@ -35,18 +36,8 @@ def runGame(windowSize, playSize):
         if boxResponse == True:
             menuScreen.gameLaunched()
 
-    def create_grid(locked_positions={}):
-        grid = [[(0,0,0) for x in range(10)] for x in range(20)]
-
-        for i in range(len(grid)):
-            for j in range(len(grid[i])):
-                if (j,i) in locked_positions:
-                    c = locked_positions[(j,i)]
-                    grid[i][j] = c
-        return grid
-
-    def valid_space(tetronomo, grid):
-        accepted_pos = [[(j,i) for j in range(10) if grid[i][j]== (0,0,0)] for i in range(20)]
+    def valid_space(tetronomo, playField):
+        accepted_pos = [[(j,i) for j in range(10) if playField[i][j]== (0,0,0)] for i in range(20)]
         accepted_pos = [j for sub in accepted_pos for j in sub]
 
         formatted = tetronomo.convert_shape_format()
@@ -67,17 +58,15 @@ def runGame(windowSize, playSize):
     def draw_text_middle(text, size, color, surface):  
         pass
     
-    def draw_grid(surface, grid):
+    def draw_grid(surface, playField):
         sx = top_left_x
         sy = top_left_y
 
-        for i in range(len(grid)):
+        for i in range(len(playField)):
             pygame.draw.line(surface, (128,128,128), (sx, sy+i*block_size), (sx+play_width, sy+i*block_size))
-            for j in range(len(grid[i])+1):
+            for j in range(len(playField[i])+1):
                 pygame.draw.line(surface, (128,128,128), (sx+j*block_size, sy), (sx+j*block_size, sy+play_height))
 
-    def clear_rows(grid, locked):
-        pass
 
     def draw_preview_tetronomo(tetronomo, surface):
         font = pygame.font.SysFont('arial', 30)
@@ -94,7 +83,7 @@ def runGame(windowSize, playSize):
                     pygame.draw.rect(surface, tetronomo.colour, (sx+j*block_size, sy+i*block_size, block_size, block_size),0)
         surface.blit(label, (sx+10, sy-30))
 
-    def draw_window(surface, grid):
+    def draw_window(surface, playField):
         surface.fill((0,0,0))
         pygame.font.init()
         font = pygame.font.SysFont('arial', 60)
@@ -112,17 +101,17 @@ def runGame(windowSize, playSize):
         surface.blit(label4, (0+windowSize[0] *4/5 - label4.get_width(), 15))
         surface.blit(label5, (windowSize[0]*1/5, 15))
 
-        for i in range(len(grid)):
-            for j in range(len(grid[i])):
-                pygame.draw.rect(surface, grid[i][j], (top_left_x+j*block_size, top_left_y+i*block_size, block_size, block_size), 0) #Draw blocks
+        for i in range(len(playField)):
+            for j in range(len(playField[i])):
+                pygame.draw.rect(surface, playField[i][j], (top_left_x+j*block_size, top_left_y+i*block_size, block_size, block_size), 0) #Draw blocks
 
-        draw_grid(surface, grid)
+        draw_grid(surface, playField)
         
 
 
     def main(win):
         locked_positions = {}
-        grid = create_grid(locked_positions)
+        playField = PlayField(locked_positions)
 
         change_piece = False
         run = True
@@ -134,7 +123,7 @@ def runGame(windowSize, playSize):
         pause = False
 
         while run:
-            grid = create_grid(locked_positions)
+            playField = PlayField(locked_positions)
             if pause == False:
                 fall_time += clock.get_rawtime() 
                 clock.tick()
@@ -142,7 +131,7 @@ def runGame(windowSize, playSize):
             if fall_time/1000 > fall_speed:
                 fall_time = 0
                 current_tetronomo.y += 1
-                if not(valid_space(current_tetronomo, grid)) and current_tetronomo.y > 0:
+                if not(valid_space(current_tetronomo, playField.grid)) and current_tetronomo.y > 0:
                     current_tetronomo.y -= 1
                     change_piece = True
             for event in pygame.event.get():
@@ -154,19 +143,19 @@ def runGame(windowSize, playSize):
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_LEFT:
                             current_tetronomo.x -= 1
-                            if not(valid_space(current_tetronomo, grid)):
+                            if not(valid_space(current_tetronomo, playField.grid)):
                                 current_tetronomo.x+=1
                         if event.key == pygame.K_RIGHT:
                             current_tetronomo.x += 1
-                            if not(valid_space(current_tetronomo, grid)):
+                            if not(valid_space(current_tetronomo, playField.grid)):
                                 current_tetronomo.x-=1
                         if event.key == pygame.K_DOWN:
                             current_tetronomo.y += 1
-                            if not(valid_space(current_tetronomo, grid)):
+                            if not(valid_space(current_tetronomo, playField.grid)):
                                 current_tetronomo.y-=1
                         if event.key == pygame.K_UP:
                             current_tetronomo.rotation += 1
-                            if not(valid_space(current_tetronomo, grid)):
+                            if not(valid_space(current_tetronomo, playField.grid)):
                                 current_tetronomo.rotation-=1
                         if event.key == pygame.K_ESCAPE:
                             pause = True
@@ -176,7 +165,7 @@ def runGame(windowSize, playSize):
             for i in range(len(shape_pos)):
                 x,y = shape_pos[i]
                 if y > -1:
-                    grid[y][x] = current_tetronomo.colour
+                    playField.grid[y][x] = current_tetronomo.colour
 
             if change_piece:
                 for pos in shape_pos:
@@ -185,7 +174,7 @@ def runGame(windowSize, playSize):
                 current_tetronomo = preview_tetronomo
                 preview_tetronomo.new_random_shape()
                 change_piece = False
-            draw_window(win,grid)
+            draw_window(win,playField.grid)
             draw_preview_tetronomo(preview_tetronomo, win)
             pygame.display.update()
 
