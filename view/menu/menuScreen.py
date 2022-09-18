@@ -3,13 +3,12 @@ import pygame_menu
 import view.gameScreen as gameScreen
 import view.menu.configureScreen as configureScreen
 import view.menu.topScoreScreen as highScoreScreen
-import json
+import controller.menu.menuController as menuController
 
 
 
 def gameLaunched():
-    f = open('data/config.json')
-    config = json.load(f)
+    config = menuController.getConfig()
     pygame.init()
     surface = pygame.display.set_mode((config['screenSize']['width'], config['screenSize']['height']))
 

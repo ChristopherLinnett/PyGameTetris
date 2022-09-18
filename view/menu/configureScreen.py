@@ -32,8 +32,6 @@ def showConfigScreen():
         menuController.saveConfig(newConfig)
         showConfigScreen()
 
-
-
     menu = pygame_menu.Menu(title='Settings', width=surface.get_width(), height=surface.get_height())
     widthInput = menu.add.text_input(title="Play Width: ", input_type='input-int', maxchar=4, onreturn=setPlayWidth)
     widthInput.set_value(config['screenSize']['width'])
