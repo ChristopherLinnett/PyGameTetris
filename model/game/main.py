@@ -26,6 +26,8 @@ def runGame(config, controller):
     block_size = (play_width if (play_width<play_height) else play_height)//10
     top_left_x = (s_width - play_width)//2
     top_left_y = s_height - play_height
+    global score
+    score = 0
 
 
     # SHAPE FORMATS
@@ -90,17 +92,17 @@ def runGame(config, controller):
         font = pygame.font.SysFont('arial', 60)
         menuFont = pygame.font.SysFont('arial', 24)
 
-        label = font.render('Tetris', 1, (255,255,255))
+        fontLabel = font.render('Tetris', 1, (255,255,255))
         label2 = menuFont.render('Group: 10', 1, (255,255,255))
-        label3 = menuFont.render('Score: 0', 1, (255,255,255))
-        label4 = menuFont.render('Level: 1', 1, (255,255,255))
-        label5 = menuFont.render('Mode: Player', 1, (255,255,255))
+        scoreLabel = menuFont.render(f'Score: {score}', 1, (255,255,255))
+        levelLabel = menuFont.render('Level: 1', 1, (255,255,255))
+        modeLabel = menuFont.render('Mode: Player', 1, (255,255,255))
 
-        surface.blit(label, (0+s_width//2 - label.get_width()//2, 30))
+        surface.blit(fontLabel, (0+s_width//2 - fontLabel.get_width()//2, 30))
         surface.blit(label2, (0, 15))
-        surface.blit(label3, (0+s_width - label3.get_width(), 15))
-        surface.blit(label4, (0+s_width *4/5 - label4.get_width(), 15))
-        surface.blit(label5, (s_width*1/5, 15))
+        surface.blit(scoreLabel, (0+s_width - scoreLabel.get_width(), 15))
+        surface.blit(levelLabel, (0+s_width *4/5 - levelLabel.get_width(), 15))
+        surface.blit(modeLabel, (s_width*1/5, 15))
 
         for i in range(len(playField)):
             for j in range(len(playField[i])):
@@ -176,14 +178,16 @@ def runGame(config, controller):
                     playField.grid[y][x] = current_tetronomo.colour
 
             if change_piece:
+                global score
                 for pos in shape_pos:
                     p = (pos[0], pos[1])
                     playField.locked_positions[p] = current_tetronomo.colour
                 current_tetronomo = preview_tetronomo
-
                 preview_tetronomo = Tetronomo(5,0,random.choice(sd.shapes))
                 change_piece = False
-                playField.clear_rows()
+                clearedRows = playField.clear_rows()
+                score += 50*clearedRows**2+50*clearedRows
+                
                 
             draw_window(win,playField.grid)
             draw_preview_tetronomo(preview_tetronomo, win)

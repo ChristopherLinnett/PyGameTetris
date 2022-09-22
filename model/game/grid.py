@@ -29,4 +29,4 @@ class PlayField():
                 if y < index:
                     newKey = (x,y + delRowCount)
                     self.locked_positions[newKey] = self.locked_positions.pop(key)
-        
+        return delRowCount
