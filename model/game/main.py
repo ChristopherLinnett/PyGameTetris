@@ -35,7 +35,7 @@ def runGame(config, controller):
     def showPopUpBox():
         boxResponse = messagebox.askyesno(title="Exit Game?",message="Are you sure you want to quit")
         if boxResponse == True:
-            menuScreen.gameLaunched()
+            menuScreen.MainMenu(controller)
 
     def valid_space(tetronomo, playField):
         accepted_pos = [[(j,i) for j in range(10) if playField[i][j]== (0,0,0)] for i in range(20)]
@@ -138,7 +138,7 @@ def runGame(config, controller):
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-
+  
                 if pause == False:
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_LEFT:
@@ -160,7 +160,15 @@ def runGame(config, controller):
                         if event.key == pygame.K_ESCAPE:
                             pause = True
                             showPopUpBox()
+                            pause = False  
+                        if event.key == pygame.K_p:
+                            pause = True
+                else:
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_p:
                             pause = False
+
+                          
             shape_pos = current_tetronomo.convert_shape_format()
             for i in range(len(shape_pos)):
                 x,y = shape_pos[i]

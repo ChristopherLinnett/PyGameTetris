@@ -14,7 +14,7 @@ class MenuController:
         self.highScores = highScoreModel.getHighScores()
         self.config = configModel.getConfig()
         self.newConfig = configModel.getConfig()
-        self.surface = pygame.display.set_mode((self.config['screenSize']['width'], self.config['screenSize']['height']))
+        self.surface = pygame.display.set_mode((self.config['screenSize']['width'], self.config['screenSize']['height']),pygame.RESIZABLE)
         self.menu = MainMenu(self)
 
     def goToConfig(self):
