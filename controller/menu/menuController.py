@@ -27,7 +27,7 @@ class MenuController:
         self.menu = HighScoreScreen(self)
 
     def startTheGame(self):
-        game.runGame(self.config)
+        game.runGame(self.config,self)
 
     def setExtendedMode(self, value):
         self.newConfig['extendedMode'] = value

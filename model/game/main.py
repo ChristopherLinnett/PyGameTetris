@@ -6,7 +6,8 @@ from model.game.tetronomo import Tetronomo
 import model.game.shapesData as sd
 from model.game.grid import PlayField
 
-def runGame(config):
+
+def runGame(config, controller):
     import pygame
     import random
     """
@@ -110,8 +111,7 @@ def runGame(config):
 
 
     def main(win):
-        locked_positions = {}
-        playField = PlayField(locked_positions)
+        playField = PlayField()
 
         change_piece = False
         run = True
@@ -123,7 +123,7 @@ def runGame(config):
         pause = False
 
         while run:
-            playField = PlayField(locked_positions)
+            playField.update()
             if pause == False:
                 fall_time += clock.get_rawtime() 
                 clock.tick()
@@ -170,17 +170,20 @@ def runGame(config):
             if change_piece:
                 for pos in shape_pos:
                     p = (pos[0], pos[1])
-                    locked_positions[p] = current_tetronomo.colour
+                    playField.locked_positions[p] = current_tetronomo.colour
                 current_tetronomo = preview_tetronomo
-                preview_tetronomo.new_random_shape()
+
+                preview_tetronomo = Tetronomo(5,0,random.choice(sd.shapes))
                 change_piece = False
+                playField.clear_rows()
+                
             draw_window(win,playField.grid)
             draw_preview_tetronomo(preview_tetronomo, win)
             pygame.display.update()
 
-            if check_lost(locked_positions):
+            if check_lost(playField.locked_positions):
                 run = False
-        topScoreScreen.showTopScores()
+        topScoreScreen.HighScoreScreen(controller)
 
     def main_menu(win):
         main(win)
