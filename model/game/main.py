@@ -6,7 +6,8 @@ from model.game.tetronomo import Tetronomo
 import model.game.shapesData as sd
 from model.game.grid import PlayField
 
-def runGame(windowSize, playSize):
+
+def runGame(config, controller):
     import pygame
     import random
     """
@@ -18,8 +19,8 @@ def runGame(windowSize, playSize):
     pygame.font.init()
 
     # GLOBALS VARS
-    s_width = windowSize[0]
-    s_height = windowSize[1]
+    s_width = config['screenSize']['width']
+    s_height = config['screenSize']['height']
     play_width = 300  # meaning 300 // 10 = 30 width per block
     play_height = 600  # meaning 600 // 20 = 20 height per block
     block_size = (play_width if (play_width<play_height) else play_height)//10
@@ -95,11 +96,11 @@ def runGame(windowSize, playSize):
         label4 = menuFont.render('Level: 1', 1, (255,255,255))
         label5 = menuFont.render('Mode: Player', 1, (255,255,255))
 
-        surface.blit(label, (0+windowSize[0]//2 - label.get_width()//2, 30))
+        surface.blit(label, (0+s_width//2 - label.get_width()//2, 30))
         surface.blit(label2, (0, 15))
-        surface.blit(label3, (0+windowSize[0] - label3.get_width(), 15))
-        surface.blit(label4, (0+windowSize[0] *4/5 - label4.get_width(), 15))
-        surface.blit(label5, (windowSize[0]*1/5, 15))
+        surface.blit(label3, (0+s_width - label3.get_width(), 15))
+        surface.blit(label4, (0+s_width *4/5 - label4.get_width(), 15))
+        surface.blit(label5, (s_width*1/5, 15))
 
         for i in range(len(playField)):
             for j in range(len(playField[i])):
@@ -110,8 +111,7 @@ def runGame(windowSize, playSize):
 
 
     def main(win):
-        locked_positions = {}
-        playField = PlayField(locked_positions)
+        playField = PlayField()
 
         change_piece = False
         run = True
@@ -123,7 +123,7 @@ def runGame(windowSize, playSize):
         pause = False
 
         while run:
-            playField = PlayField(locked_positions)
+            playField.update()
             if pause == False:
                 fall_time += clock.get_rawtime() 
                 clock.tick()
@@ -170,17 +170,20 @@ def runGame(windowSize, playSize):
             if change_piece:
                 for pos in shape_pos:
                     p = (pos[0], pos[1])
-                    locked_positions[p] = current_tetronomo.colour
+                    playField.locked_positions[p] = current_tetronomo.colour
                 current_tetronomo = preview_tetronomo
-                preview_tetronomo.new_random_shape()
+
+                preview_tetronomo = Tetronomo(5,0,random.choice(sd.shapes))
                 change_piece = False
+                playField.clear_rows()
+                
             draw_window(win,playField.grid)
             draw_preview_tetronomo(preview_tetronomo, win)
             pygame.display.update()
 
-            if check_lost(locked_positions):
+            if check_lost(playField.locked_positions):
                 run = False
-        topScoreScreen.showTopScores()
+        topScoreScreen.HighScoreScreen(controller)
 
     def main_menu(win):
         main(win)

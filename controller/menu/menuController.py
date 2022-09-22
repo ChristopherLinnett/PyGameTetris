@@ -1,7 +1,55 @@
-import model.menu.configModel as configClass
+import model.menu.configModel as configModel
+import model.menu.highscoreModel as highScoreModel
+import model.game.main as game
 
-def getConfig():
-    return configClass.config
+from view.menu.menuScreen import MainMenu
+from view.menu.configureScreen import ConfigScreen
+from view.menu.topScoreScreen import HighScoreScreen
 
-def saveConfig(newConfig):
-    configClass.saveConfig(newConfig)
+import pygame
+
+class MenuController:
+    def __init__(self):
+        pygame.init()
+        self.highScores = highScoreModel.getHighScores()
+        self.config = configModel.getConfig()
+        self.newConfig = configModel.getConfig()
+        self.surface = pygame.display.set_mode((self.config['screenSize']['width'], self.config['screenSize']['height']))
+        self.menu = MainMenu(self)
+
+    def goToConfig(self):
+        self.menu = ConfigScreen(self)
+
+    def goToMainMenu(self):
+        self.menu = MainMenu(self)
+
+    def goToHighScore(self):
+        self.menu = HighScoreScreen(self)
+
+    def startTheGame(self):
+        game.runGame(self.config,self)
+
+    def setExtendedMode(self, value):
+        self.newConfig['extendedMode'] = value
+    
+    def setAIMode(self, value):
+        self.newConfig['aiMode'] = value
+    
+    def setStartingLevel(self, value):
+        self.newConfig['startingLevel'] = value
+    
+    def setPlayWidth(self, value):
+        self.newConfig['screenSize']['width'] = value
+    
+    def setPlayHeight(self, value):
+        self.newConfig['screenSize']['height'] = value
+    
+    def setAudioEnabled(self, value):
+        self.newConfig['audioEnabled'] = value
+    
+    def saveNewConfig(self):
+        configModel.saveConfig(self.newConfig)
+        self.surface = pygame.display.set_mode((self.newConfig['screenSize']['width'], self.newConfig['screenSize']['height']))
+
+    def setStartingLevel(self):
+        pass
