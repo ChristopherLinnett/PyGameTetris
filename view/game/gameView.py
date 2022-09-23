@@ -1,3 +1,5 @@
+from tkinter import messagebox
+
 class GameView():
     def __init__(self,controller,pygame, surface):
         self.pygame = pygame
@@ -61,4 +63,12 @@ class GameView():
                 self.pygame.draw.rect(self.surface, playField[i][j], (self.top_left_x+j*self.block_size, self.top_left_y+i*self.block_size, self.block_size, self.block_size), 0) #Draw blocks
 
         self.drawPlayField()
+
+    def showPopUpBox(self):
+        boxResponse = messagebox.askyesno(
+            title="Exit Game?", message="Are you sure you want to quit"
+        )
+        if boxResponse == True:
+            self.controller.run=False
+
         
