@@ -1,5 +1,5 @@
-import model.menu.configModel as configModel
-import model.menu.highscoreModel as highScoreModel
+from model.menu.configModel import configModel
+from model.menu.highscoreModel import highscoreModel
 import controller.gameController as game
 
 from view.menu.menuScreen import MainMenu
@@ -11,9 +11,11 @@ import pygame
 class MenuController:
     def __init__(self):
         pygame.init()
-        self.highScores = highScoreModel.getHighScores()
-        self.config = configModel.getConfig()
-        self.newConfig = configModel.getConfig()
+        self.configModel = configModel()
+        self.highscoreModel = highscoreModel()
+        self.highScores = self.highscoreModel.getHighScores()
+        self.config = self.configModel.getConfig()
+        self.newConfig = self.configModel.getConfig()
         self.surface = pygame.display.set_mode((self.config['screenSize']['width'], self.config['screenSize']['height']),pygame.RESIZABLE)
         self.menu = MainMenu(self)
 
@@ -48,7 +50,7 @@ class MenuController:
         self.newConfig['audioEnabled'] = value
     
     def saveNewConfig(self):
-        configModel.saveConfig(self.newConfig)
+        self.configModel.saveConfig(self.newConfig)
         self.surface = pygame.display.set_mode((self.newConfig['screenSize']['width'], self.newConfig['screenSize']['height']))
 
     def setStartingLevel(self):
