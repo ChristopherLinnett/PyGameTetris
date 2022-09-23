@@ -16,7 +16,7 @@ class Tetronomo(object):
         self.colour = sd.shape_colours[sd.shapes.index(self.shape)]
         self.rotation = 0
 
-    def convert_shape_format(self):
+    def rotate(self):
         positions = []
         format = self.shape[self.rotation % len(self.shape)]
 

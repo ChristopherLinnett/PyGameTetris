@@ -11,7 +11,7 @@ class PlayField():
                     c = self.locked_positions[(j,i)]
                     self.grid[i][j] = c
         
-    def clear_rows(self):
+    def clearRows(self):
         delRowCount = 0
         for i in range(len(self.grid)-1,-1,-1):
             row = self.grid[i]

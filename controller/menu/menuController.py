@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 from model.menu.configModel import configModel
 from model.menu.highscoreModel import highscoreModel
 import model.game.main as game
+=======
+import model.menu.configModel as configModel
+import model.menu.highscoreModel as highScoreModel
+import controller.gameController as game
+>>>>>>> 4cf3d39b28497d649762f77ae4703921c044ce65
 
 from view.menu.menuScreen import MainMenu
 from view.menu.configureScreen import ConfigScreen
@@ -29,7 +35,7 @@ class MenuController:
         self.menu = HighScoreScreen(self)
 
     def startTheGame(self):
-        game.runGame(self.config,self)
+        screen = game.GameController(self)
 
     def setExtendedMode(self, value):
         self.newConfig['extendedMode'] = value
