@@ -22,7 +22,7 @@ class GameController:
         self.nextTetronomo = Tetronomo(5, 0, random.choice(sd.shapes))
         self.clock = pygame.time.Clock()
         self.fallTime = 0
-        self.fallSpeed = 0.27
+        self.fallSpeed = 0.2
         self.pause = False
         self.startGame()  # start game
 

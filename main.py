@@ -1,3 +1,3 @@
-from controller.menu.menuController import MenuController
+from controller.menuController import MenuController
 
 game = MenuController()
