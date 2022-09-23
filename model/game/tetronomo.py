@@ -1,12 +1,9 @@
-import model.game.shapesData as sd
+from abc import ABC
 
-
-class Tetronomo(object):
-    def __init__(self, x, y, shape):
+class Tetronomo(ABC):
+    def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.shape = shape
-        self.colour = sd.colours[sd.shapes.index(shape)]
         self.rotation = 0
 
     def rotate(self):

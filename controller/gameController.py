@@ -1,5 +1,5 @@
 import sys
-from model.game.tetronomo import Tetronomo
+from model.game.tetronomoFactory import TetronomoFactory
 import model.game.shapesData as sd
 from model.game.grid import PlayField
 import view.menu.topScoreScreen as topScoreScreen
@@ -18,8 +18,8 @@ class GameController:
         self.playField = PlayField()
         self.tetroLanded = False
         self.run = True
-        self.mainTetronomo = Tetronomo(5, 0, random.choice(sd.shapes))
-        self.nextTetronomo = Tetronomo(5, 0, random.choice(sd.shapes))
+        self.mainTetronomo = TetronomoFactory.createTetronomo(5, 0, random.choice(sd.shapes))
+        self.nextTetronomo = TetronomoFactory.createTetronomo(5, 0, random.choice(sd.shapes))
         self.clock = pygame.time.Clock()
         self.fallTime = 0
         self.fallSpeed = 0.2
@@ -105,7 +105,7 @@ class GameController:
                     p = (pos[0], pos[1])
                     self.playField.filledPositions[p] = self.mainTetronomo.colour
                 self.mainTetronomo = self.nextTetronomo
-                self.nextTetronomo = Tetronomo(5, 0, random.choice(sd.shapes))
+                self.nextTetronomo = TetronomoFactory.createTetronomo(5, 0, random.choice(sd.shapes))
                 self.tetroLanded = False
                 clearedRows = self.playField.clearRows()
                 self.score += 50 * clearedRows**2 + 50 * clearedRows
