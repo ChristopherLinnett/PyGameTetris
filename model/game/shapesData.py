@@ -136,5 +136,47 @@ class shapeT(Tetronomo):
         '.....']]
 
                 self.colour = (128, 0, 128)
+class shapeSmallI(Tetronomo):
+        def __init__ (self, x, y):
+                super().__init__(x,y)
+                self.shape = [['..0..',
+        '..0..',
+        '..0..',
+        '.....',
+        '.....'],
+        ['.....',
+        '000.',
+        '.....',
+        '.....',
+        '.....']]
+
+                self.colour = (0, 255, 255)
+
+class shapeSmallL(Tetronomo):
+        def __init__ (self, x, y):
+                super().__init__(x,y)
+                self.shape = [['.....',
+        '...0.',
+        '..00.',
+        '.....',
+        '.....'],
+        ['.....',
+        '.....',
+        '..0..',
+        '..00.',
+        '.....'],
+        ['.....',
+        '.....',
+        '.00..',
+        '.0...',
+        '.....'],
+        ['.....',
+        '.00..',
+        '..0..',
+        '.....',
+        '.....']]
+
+                self.colour = (0, 0, 255)
 
 shapes = ['S', 'Z', 'I', 'O', 'J', 'L', 'T']
+extendedShapes = ['smallL', 'smallI']

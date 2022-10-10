@@ -16,5 +16,9 @@ class TetronomoFactory(object):
             return shapeL(x, y)
         elif tetronomoType == 'T':
             return shapeT(x, y)
+        elif tetronomoType == 'smallI':
+            return shapeSmallI(x, y)
+        elif tetronomoType == 'smallL':
+            return shapeSmallL(x, y)
         else:
             print('Invalid Tetronomo Type')

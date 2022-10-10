@@ -14,12 +14,14 @@ class GameController:
         pygame.font.init()
         self.gameView = GameView(self, pygame, controller.surface)
         self.controller = controller
+        self.extendedMode = controller.config['extendedMode']
+        self.possibleShapes = sd.shapes if not self.extendedMode else sd.shapes+sd.extendedShapes
         self.score = 0
         self.playField = PlayField()
         self.tetroLanded = False
         self.run = True
-        self.mainTetronomo = TetronomoFactory.createTetronomo(5, 0, random.choice(sd.shapes))
-        self.nextTetronomo = TetronomoFactory.createTetronomo(5, 0, random.choice(sd.shapes))
+        self.mainTetronomo = TetronomoFactory.createTetronomo(5, 0, random.choice(self.possibleShapes))
+        self.nextTetronomo = TetronomoFactory.createTetronomo(5, 0, random.choice(self.possibleShapes))
         self.clock = pygame.time.Clock()
         self.fallTime = 0
         self.fallSpeed = 0.2
@@ -100,12 +102,11 @@ class GameController:
                     self.playField.grid[y][x] = self.mainTetronomo.colour
 
             if self.tetroLanded:
-                global score
                 for pos in tetroRotationState:
                     p = (pos[0], pos[1])
                     self.playField.filledPositions[p] = self.mainTetronomo.colour
                 self.mainTetronomo = self.nextTetronomo
-                self.nextTetronomo = TetronomoFactory.createTetronomo(5, 0, random.choice(sd.shapes))
+                self.nextTetronomo = TetronomoFactory.createTetronomo(5, 0, random.choice(self.possibleShapes))
                 self.tetroLanded = False
                 clearedRows = self.playField.clearRows()
                 self.score += 50 * clearedRows**2 + 50 * clearedRows
