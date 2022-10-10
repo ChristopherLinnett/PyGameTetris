@@ -51,6 +51,3 @@ class MenuController:
     
     def saveNewConfig(self):
         self.configModel.saveConfig(self.newConfig)
-
-    def setStartingLevel(self):
-        pass

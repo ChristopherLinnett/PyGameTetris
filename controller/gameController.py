@@ -16,17 +16,18 @@ class GameController:
         self.extendedMode = controller.config['extendedMode']
         self.possibleShapes = sd.shapes if not self.extendedMode else sd.shapes+sd.extendedShapes
         self.score = 0
+        self.level = int(controller.config['startingLevel'])
         self.width = int(controller.config['playfieldSize']['width']) if int(controller.config['playfieldSize']['width']) > 7 else 7
         self.height = int(controller.config['playfieldSize']['height']) if int(controller.config['playfieldSize']['height']) > 10 else 10
         self.gameView = GameView(self, pygame, controller.surface, self.width, self.height)
         self.playField = PlayField(self.width,self.height)
         self.tetroLanded = False
         self.run = True
-        self.mainTetronomo = TetronomoFactory.createTetronomo(5, 0, random.choice(self.possibleShapes))
-        self.nextTetronomo = TetronomoFactory.createTetronomo(5, 0, random.choice(self.possibleShapes))
+        self.mainTetronomo = TetronomoFactory.createTetronomo(self.width//2, 0, random.choice(self.possibleShapes))
+        self.nextTetronomo = TetronomoFactory.createTetronomo(self.width//2, 0, random.choice(self.possibleShapes))
         self.clock = pygame.time.Clock()
         self.fallTime = 0
-        self.fallSpeed = 0.2
+        self.fallSpeed = 0.3/(1+(.5*(self.level-1)))
         self.pause = False
         self.startGame()  # start game
 
@@ -47,6 +48,7 @@ class GameController:
         for pos in self.playField.filledPositions:
             x, y = pos
             if y < 1:
+                print(pos)
                 return True
         return False
 
@@ -108,14 +110,19 @@ class GameController:
                     p = (pos[0], pos[1])
                     self.playField.filledPositions[p] = self.mainTetronomo.colour
                 self.mainTetronomo = self.nextTetronomo
-                self.nextTetronomo = TetronomoFactory.createTetronomo(5, 0, random.choice(self.possibleShapes))
+                self.nextTetronomo = TetronomoFactory.createTetronomo(self.width//2, 0, random.choice(self.possibleShapes))
                 self.tetroLanded = False
                 clearedRows = self.playField.clearRows()
                 self.score += 50 * clearedRows**2 + 50 * clearedRows
+                if self.score >= self.level*500:
+                    self.level+=1
+                    self.fallSpeed = 0.3/(1+(.095*(self.level-1)))
+
             self.gameView.drawWindow(self.playField.grid)
             self.gameView.drawNextTetronomo(self.nextTetronomo)
             pygame.display.update()
 
+
             if self.loseCondition():
                 self.run = False
-        topScoreScreen.HighScoreScreen(self.controller)
+                topScoreScreen.HighScoreScreen(self.controller)

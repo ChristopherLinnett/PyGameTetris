@@ -1,1 +1,1 @@
-{"playfieldSize": {"width": 40, "height": 80}, "startingLevel": 1, "extendedMode": true, "audioEnabled": true, "aiMode": false}
+{"playfieldSize": {"width": 30, "height": 20}, "startingLevel": 5, "extendedMode": false, "audioEnabled": true, "aiMode": false}

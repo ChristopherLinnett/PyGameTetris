@@ -55,7 +55,7 @@ class GameView():
         fontLabel = font.render('Tetris', 1, (255,255,255))
         label2 = menuFont.render('Group: 10', 1, (255,255,255))
         scoreLabel = menuFont.render(f'Score: {self.controller.score}', 1, (255,255,255))
-        levelLabel = menuFont.render('Level: 1', 1, (255,255,255))
+        levelLabel = menuFont.render(f'level: {self.controller.level}', 1, (255,255,255))
         modeLabel = menuFont.render('Mode: Player', 1, (255,255,255))
 
         self.surface.blit(fontLabel, (0+self.s_width/2 - fontLabel.get_width()/2, 30))
