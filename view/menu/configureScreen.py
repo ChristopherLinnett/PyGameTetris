@@ -4,11 +4,11 @@ class ConfigScreen:
     def __init__(self, controller):
         
         self.menu = pygame_menu.Menu(title='Settings', width=controller.surface.get_width(), height=controller.surface.get_height(), theme=pygame_menu.themes.THEME_DARK)
-        widthInput = self.menu.add.text_input(title="Play Width: ", input_type='input-int', maxchar=4, onchange=controller.setPlayWidth)
-        widthInput.set_value(controller.config['screenSize']['width'])
+        widthInput = self.menu.add.text_input(title="Playfield Width: ", input_type='input-int', maxchar=2, onchange=controller.setPlayWidth)
+        widthInput.set_value(controller.config['playfieldSize']['width'])
         
-        heightInput = self.menu.add.text_input(title="Play Height: ", input_type='input-int', maxchar=4, onchange=controller.setPlayHeight)
-        heightInput.set_value(controller.config['screenSize']['height'])
+        heightInput = self.menu.add.text_input(title="Playfield Height: ", input_type='input-int', maxchar=2, onchange=controller.setPlayHeight)
+        heightInput.set_value(controller.config['playfieldSize']['height'])
 
         startingLevelInput = self.menu.add.range_slider(title="Starting Level", increment=1,default=1, range_values=(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20),range_text_value_enabled=False, onchange=controller.setStartingLevel)
         startingLevelInput.set_value(controller.config['startingLevel'])

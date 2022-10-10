@@ -1,15 +1,19 @@
 from tkinter import messagebox
 
 class GameView():
-    def __init__(self,controller,pygame, surface):
+    def __init__(self,controller,pygame, surface, gridResX,gridResY):
         self.pygame = pygame
         self.controller = controller
         self.surface = surface
         self.s_width, self.s_height = self.surface.get_size()
-        self.play_width = 300
-        self.play_height = 600
-        self.block_size = (self.play_width if (self.play_width<self.play_height) else self.play_height)//10
-        self.top_left_x = (self.s_width - self.play_width)//2
+        self.gridResX = gridResX
+        self.gridResY = gridResY
+        self.play_width = 600*(gridResX/gridResY) if gridResX<=1.5*gridResY else 900
+        self.play_height = 600 if gridResX<=1.5*gridResY else 900*(gridResY/gridResX)
+        self.block_size = (self.play_height/gridResY if gridResX<=1.5*gridResY else self.play_width/gridResX)
+        if gridResX>=1.5*gridResY:
+            print(gridResX, gridResY*1.5, gridResX>=gridResY)
+        self.top_left_x = (self.s_width - self.play_width)/2
         self.top_left_y = self.s_height - self.play_height
         self.win = pygame.display.set_mode((self.s_width, self.s_height))
         pygame.display.set_caption('Tetris')
@@ -21,15 +25,17 @@ class GameView():
 
         for i in range(len(self.controller.playField.grid)):
             self.pygame.draw.line(self.surface, (128,128,128), (sx, sy+i*self.block_size), (sx+self.play_width, sy+i*self.block_size))
-            for j in range(len(self.controller.playField.grid[i])+1):
+            for j in range(0,len(self.controller.playField.grid[i])+1):
                 self.pygame.draw.line(self.surface, (128,128,128), (sx+j*self.block_size, sy), (sx+j*self.block_size, sy+self.play_height))
+        self.pygame.draw.line(self.surface, (255,0,0), (sx, sy+(len(self.controller.playField.grid))*self.block_size), (sx+self.play_width, sy+(len(self.controller.playField.grid))*self.block_size))
+
 
 
     def drawNextTetronomo(self,tetronomo):
         font = self.pygame.font.SysFont('arial', 30)
         label = font.render("Next Shape", 1, (255,255,255))
 
-        sx = self.top_left_x + self.play_width +50
+        sx = self.top_left_x + self.play_width+50
         sy = self.top_left_y + self.play_height/2-100
         format = tetronomo.shape[tetronomo.rotation % len(tetronomo.shape)]
 
@@ -52,7 +58,7 @@ class GameView():
         levelLabel = menuFont.render('Level: 1', 1, (255,255,255))
         modeLabel = menuFont.render('Mode: Player', 1, (255,255,255))
 
-        self.surface.blit(fontLabel, (0+self.s_width//2 - fontLabel.get_width()//2, 30))
+        self.surface.blit(fontLabel, (0+self.s_width/2 - fontLabel.get_width()/2, 30))
         self.surface.blit(label2, (0, 15))
         self.surface.blit(scoreLabel, (0+self.s_width - scoreLabel.get_width(), 15))
         self.surface.blit(levelLabel, (0+self.s_width *4/5 - levelLabel.get_width(), 15))

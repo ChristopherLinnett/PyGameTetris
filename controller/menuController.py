@@ -16,7 +16,7 @@ class MenuController:
         self.highScores = self.highscoreModel.getHighScores()
         self.config = self.configModel.getConfig()
         self.newConfig = self.configModel.getConfig()
-        self.surface = pygame.display.set_mode((self.config['screenSize']['width'], self.config['screenSize']['height']),pygame.RESIZABLE)
+        self.surface = pygame.display.set_mode((1280, 720),pygame.RESIZABLE)
         self.menu = MainMenu(self)
 
     def goToConfig(self):
@@ -41,17 +41,16 @@ class MenuController:
         self.newConfig['startingLevel'] = value
     
     def setPlayWidth(self, value):
-        self.newConfig['screenSize']['width'] = value
+        self.newConfig['playfieldSize']['width'] = value
     
     def setPlayHeight(self, value):
-        self.newConfig['screenSize']['height'] = value
+        self.newConfig['playfieldSize']['height'] = value
     
     def setAudioEnabled(self, value):
         self.newConfig['audioEnabled'] = value
     
     def saveNewConfig(self):
         self.configModel.saveConfig(self.newConfig)
-        self.surface = pygame.display.set_mode((self.newConfig['screenSize']['width'], self.newConfig['screenSize']['height']))
 
     def setStartingLevel(self):
         pass

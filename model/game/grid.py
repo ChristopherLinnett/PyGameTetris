@@ -1,10 +1,12 @@
 class PlayField:
-    def __init__(self):
+    def __init__(self, width, height):
         self.filledPositions = {}
+        self.width = width
+        self.height = height
         self.update()
 
     def update(self):
-        self.grid = [[(0, 0, 0) for x in range(10)] for x in range(20)]
+        self.grid = [[(0, 0, 0) for x in range(self.width)] for x in range(self.height)]
         for i in range(len(self.grid)):
             for j in range(len(self.grid[i])):
                 if (j, i) in self.filledPositions:

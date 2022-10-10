@@ -12,12 +12,14 @@ import random
 class GameController:
     def __init__(self, controller):
         pygame.font.init()
-        self.gameView = GameView(self, pygame, controller.surface)
         self.controller = controller
         self.extendedMode = controller.config['extendedMode']
         self.possibleShapes = sd.shapes if not self.extendedMode else sd.shapes+sd.extendedShapes
         self.score = 0
-        self.playField = PlayField()
+        self.width = int(controller.config['playfieldSize']['width']) if int(controller.config['playfieldSize']['width']) > 7 else 7
+        self.height = int(controller.config['playfieldSize']['height']) if int(controller.config['playfieldSize']['height']) > 10 else 10
+        self.gameView = GameView(self, pygame, controller.surface, self.width, self.height)
+        self.playField = PlayField(self.width,self.height)
         self.tetroLanded = False
         self.run = True
         self.mainTetronomo = TetronomoFactory.createTetronomo(5, 0, random.choice(self.possibleShapes))
@@ -30,8 +32,8 @@ class GameController:
 
     def freeSpace(self):
         emptySpaces = [
-            [(j, i) for j in range(10) if self.playField.grid[i][j] == (0, 0, 0)]
-            for i in range(20)
+            [(j, i) for j in range(self.width) if self.playField.grid[i][j] == (0, 0, 0)]
+            for i in range(self.height)
         ]
         emptySpaces = [j for sub in emptySpaces for j in sub]
         formatted = self.mainTetronomo.rotate()
