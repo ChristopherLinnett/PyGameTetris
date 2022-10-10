@@ -125,4 +125,5 @@ class GameController:
 
             if self.loseCondition():
                 self.run = False
-                topScoreScreen.HighScoreScreen(self.controller)
+        
+        topScoreScreen.HighScoreScreen(self.controller, score=self.score)
