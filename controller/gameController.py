@@ -88,15 +88,21 @@ class GameController:
                             self.mainTetronomo.rotation += 1
                             if not (self.freeSpace()):
                                 self.mainTetronomo.rotation -= 1
+                        if event.key == pygame.K_m:
+                            self.controller.audioController.mixer.music.set_volume(0 if float(self.controller.audioController.mixer.music.get_volume()) > 0 else 1)
                         if event.key == pygame.K_ESCAPE:
                             self.pause = True
                             self.gameView.showPopUpBox()
                             self.pause = False
                         if event.key == pygame.K_p:
                             self.pause = True
+                            self.controller.audioController.playSound('pauseGameSound')
+                            self.controller.audioController.pauseMusic()
                 else:
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_p:
+                            self.controller.audioController.playSound('pauseGameSound')
+                            self.controller.audioController.resumeMusic()
                             self.pause = False
 
             tetroRotationState = self.mainTetronomo.rotate()
@@ -106,6 +112,7 @@ class GameController:
                     self.playField.grid[y][x] = self.mainTetronomo.colour
 
             if self.tetroLanded:
+                self.controller.audioController.playSound('brickDroppedSound')
                 for pos in tetroRotationState:
                     p = (pos[0], pos[1])
                     self.playField.filledPositions[p] = self.mainTetronomo.colour
@@ -117,6 +124,7 @@ class GameController:
                 if self.score >= self.level*500:
                     self.level+=1
                     self.fallSpeed = 0.3/(1+(.095*(self.level-1)))
+                    self.controller.audioController.playSound('levelUpSound')
 
             self.gameView.drawWindow(self.playField.grid)
             self.gameView.drawNextTetronomo(self.nextTetronomo)
@@ -125,5 +133,6 @@ class GameController:
 
             if self.loseCondition():
                 self.run = False
-        
+        self.controller.audioController.playSound('endGameSound')
+        self.controller.audioController.startMenuMusic()
         topScoreScreen.HighScoreScreen(self.controller, score=self.score)

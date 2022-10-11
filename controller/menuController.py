@@ -1,7 +1,7 @@
 from model.menu.configModel import configModel
 from model.menu.highscoreModel import highScoreModel
 import controller.gameController as game
-
+from controller.audioController import AudioController
 from view.menu.menuScreen import MainMenu
 from view.menu.configureScreen import ConfigScreen
 from view.menu.topScoreScreen import HighScoreScreen
@@ -10,7 +10,11 @@ import pygame
 
 class MenuController:
     def __init__(self):
+        pygame.mixer.pre_init(44100, -16, 2, 2048)
+        pygame.mixer.init()
         pygame.init()
+        self.audioController = AudioController()
+        self.audioController.startMenuMusic()
         self.configModel = configModel()
         self.highScoreModel = highScoreModel()
         self.highScores = self.highScoreModel.getHighScores()
@@ -29,6 +33,7 @@ class MenuController:
 
     def goToMainMenu(self):
         self.menu = MainMenu(self)
+        self.audioController.startMenuMusic()
 
     def goToHighScore(self):
         self.menu = HighScoreScreen(self)
@@ -49,10 +54,12 @@ class MenuController:
         self.highScoreModel.saveHighScores(newHighScores)
         print('saved High Scores')
         self.highScores = self.highScoreModel.getHighScores()
+        self.audioController.playSound('saveHighScoreSound')
         self.goToHighScore()
         
 
     def startTheGame(self):
+        self.audioController.startGameMusic()
         screen = game.GameController(self)
 
     def setExtendedMode(self, value):
