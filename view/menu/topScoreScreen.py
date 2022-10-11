@@ -9,10 +9,11 @@ class HighScoreScreen:
             if score and score > int(controller.highScores[user]):
                 self.controller.tempHighScore = score
                 self.addHighScoreInput(score)
+                score = 0
             self.menu.add.label(f'{names.index(user)+1}    {user}       {controller.highScores[user]}')
         self.menu.add.label(" ")
         self.menu.add.button('Back', controller.goToMainMenu)
         self.menu.mainloop(controller.surface)
     def addHighScoreInput(self, score):
-        self.menu.add.text_input('',default='Enter Your Name',onchange=self.controller.modifyHighName)
+        self.menu.add.text_input('Enter Name:           ',default='',onchange=self.controller.modifyHighName)
         self.menu.add.button('Save',self.controller.saveHighScore)
