@@ -23,6 +23,7 @@ class GameController:
         self.playField = PlayField(self.width,self.height)
         self.tetroLanded = False
         self.run = True
+        self.totalClearedRows = 0
         self.mainTetronomo = TetronomoFactory.createTetronomo(self.width//2, 0, random.choice(self.possibleShapes))
         self.nextTetronomo = TetronomoFactory.createTetronomo(self.width//2, 0, random.choice(self.possibleShapes))
         self.clock = pygame.time.Clock()
@@ -112,7 +113,6 @@ class GameController:
                     self.playField.grid[y][x] = self.mainTetronomo.colour
 
             if self.tetroLanded:
-                self.controller.audioController.playSound('brickDroppedSound')
                 for pos in tetroRotationState:
                     p = (pos[0], pos[1])
                     self.playField.filledPositions[p] = self.mainTetronomo.colour
@@ -120,6 +120,12 @@ class GameController:
                 self.nextTetronomo = TetronomoFactory.createTetronomo(self.width//2, 0, random.choice(self.possibleShapes))
                 self.tetroLanded = False
                 clearedRows = self.playField.clearRows()
+                self.totalClearedRows+=clearedRows
+                if clearedRows != 0:
+                    self.controller.audioController.playSound('clearRowSound')
+                else:
+                    self.controller.audioController.playSound('brickDroppedSound')
+
                 self.score += 50 * clearedRows**2 + 50 * clearedRows
                 if self.score >= self.level*500:
                     self.level+=1

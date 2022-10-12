@@ -10,8 +10,6 @@ import pygame
 
 class MenuController:
     def __init__(self):
-        pygame.mixer.pre_init(44100, -16, 2, 2048)
-        pygame.mixer.init()
         pygame.init()
         self.audioController = AudioController()
         self.audioController.startMenuMusic()
@@ -21,6 +19,7 @@ class MenuController:
         self.tempHighScore = 0
         self.highName = ''
         self.config = self.configModel.getConfig()
+        self.audioController.mixer.music.set_volume(1 if self.config['audioEnabled']== True else 0)
         self.newConfig = self.configModel.getConfig()
         self.surface = pygame.display.set_mode((1280, 720),pygame.RESIZABLE)
         self.menu = MainMenu(self)
@@ -32,8 +31,11 @@ class MenuController:
         self.menu = ConfigScreen(self)
 
     def goToMainMenu(self):
-        self.menu = MainMenu(self)
         self.audioController.startMenuMusic()
+        self.audioController.mixer.music.set_volume(1 if self.config['audioEnabled']== True else 0)
+        self.menu = MainMenu(self)
+        
+
 
     def goToHighScore(self):
         self.menu = HighScoreScreen(self)
@@ -41,16 +43,13 @@ class MenuController:
         userList = list(self.highScores.keys())
         scoreList = list(self.highScores.values())
         newHighScores = {}
-        for scoreInd in range(0,10):
-            if self.tempHighScore > int(scoreList[scoreInd]):
-                newHighScores[self.highName] = self.tempHighScore
-                self.highName = ''
-                self.tempHighScore = 0
-                print('inblock')
-                print(newHighScores)
-            if scoreInd < 9:
-                newHighScores[userList[scoreInd]] = scoreList[scoreInd]
-        print(newHighScores)
+        for scoreInd in range(0,len(scoreList)):
+                if self.tempHighScore > int(scoreList[scoreInd]):
+                    newHighScores[self.highName] = self.tempHighScore
+                    self.highName = ''
+                    self.tempHighScore = 0
+                if len(list(newHighScores.keys())) < 10:
+                    newHighScores[userList[scoreInd]] = scoreList[scoreInd]
         self.highScoreModel.saveHighScores(newHighScores)
         print('saved High Scores')
         self.highScores = self.highScoreModel.getHighScores()
@@ -79,6 +78,8 @@ class MenuController:
     
     def setAudioEnabled(self, value):
         self.newConfig['audioEnabled'] = value
+        self.audioController.mixer.music.set_volume(0 if self.newConfig['audioEnabled']== False else 1)
+
     
     def saveNewConfig(self):
         self.configModel.saveConfig(self.newConfig)

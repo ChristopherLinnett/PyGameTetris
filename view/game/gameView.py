@@ -53,16 +53,23 @@ class GameView():
         menuFont = self.pygame.font.SysFont('arial', 24)
 
         fontLabel = font.render('Tetris', 1, (255,255,255))
-        label2 = menuFont.render('Group: 10', 1, (255,255,255))
+        groupLabel = menuFont.render('Group: 10', 1, (255,255,255))
         scoreLabel = menuFont.render(f'Score: {self.controller.score}', 1, (255,255,255))
+        clearedRowsLabel = menuFont.render(f'Cleared Rows: {self.controller.totalClearedRows}', 1, (255,255,255))
+
         levelLabel = menuFont.render(f'level: {self.controller.level}', 1, (255,255,255))
         modeLabel = menuFont.render('Mode: Player', 1, (255,255,255))
+        extendedLabel = menuFont.render(f'Extended Mode: {self.controller.extendedMode}', 1, (255,255,255))
 
         self.surface.blit(fontLabel, (0+self.s_width/2 - fontLabel.get_width()/2, 30))
-        self.surface.blit(label2, (0, 15))
-        self.surface.blit(scoreLabel, (0+self.s_width - scoreLabel.get_width(), 15))
+        self.surface.blit(groupLabel, (2, 15))
+        self.surface.blit(scoreLabel, (-2+self.s_width - scoreLabel.get_width(), 15))
+        self.surface.blit(clearedRowsLabel, (-2+self.s_width - clearedRowsLabel.get_width(), 45))
+
         self.surface.blit(levelLabel, (0+self.s_width *4/5 - levelLabel.get_width(), 15))
         self.surface.blit(modeLabel, (self.s_width*1/5, 15))
+        self.surface.blit(extendedLabel, (self.s_width*1/5, 45))
+
 
         for i in range(len(playField)):
             for j in range(len(playField[i])):

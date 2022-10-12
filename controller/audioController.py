@@ -3,6 +3,7 @@ from pygame import mixer
 class AudioController:
     def __init__(self):
       self.mixer = mixer
+      self.mixer.init()
       self.mixer.music.set_volume(1)
       self.initSounds()
 
@@ -13,6 +14,7 @@ class AudioController:
         self.sounds['levelUpSound'] = self.mixer.Sound('assets/levelup.wav')
         self.sounds['pauseGameSound'] = self.mixer.Sound('assets/pausegame.wav')
         self.sounds['saveHighScoreSound'] = self.mixer.Sound('assets/savehighscore.wav')
+        self.sounds['clearRowSound'] = self.mixer.Sound('assets/clear.wav')
 
     def playSound(self, sound):
         if self.mixer.music.get_volume()>0:
