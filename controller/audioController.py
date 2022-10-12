@@ -1,5 +1,6 @@
 from pygame import mixer
 
+# This class is responsible for playing audio files.
 class AudioController:
     def __init__(self):
       self.mixer = mixer

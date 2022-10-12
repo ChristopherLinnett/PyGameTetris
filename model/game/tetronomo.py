@@ -1,5 +1,6 @@
 from abc import ABC
 
+# > This class defines the basic properties and methods of a tetronomo.
 class Tetronomo(ABC):
     def __init__(self, x, y):
         self.x = x
@@ -7,6 +8,12 @@ class Tetronomo(ABC):
         self.rotation = 0
 
     def rotate(self):
+        """
+        It takes the shape of the tetromino, and then it takes the rotation of the tetromino, and then
+        it takes the x and y coordinates of the tetromino, and then it returns the positions of the
+        tetromino
+        :return: The positions of the shape.
+        """
         positions = []
         format = self.shape[self.rotation % len(self.shape)]
         for i, line in enumerate(format):

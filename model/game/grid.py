@@ -1,3 +1,4 @@
+# PlayField is a class that represents the tetris game board.
 class PlayField:
     def __init__(self, width, height):
         self.filledPositions = {}
@@ -6,6 +7,9 @@ class PlayField:
         self.update()
 
     def update(self):
+        """
+        It updates the grid.
+        """
         self.grid = [[(0, 0, 0) for x in range(self.width)] for x in range(self.height)]
         for i in range(len(self.grid)):
             for j in range(len(self.grid[i])):
@@ -14,6 +18,10 @@ class PlayField:
                     self.grid[i][j] = c
 
     def clearRows(self):
+        """
+        It deletes rows that are filled with blocks and moves the blocks above the deleted rows down
+        :return: The number of rows cleared.
+        """
         delRowCount = 0
         for i in range(len(self.grid) - 1, -1, -1):
             row = self.grid[i]

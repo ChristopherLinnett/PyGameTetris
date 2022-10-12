@@ -1,5 +1,6 @@
 import pygame_menu
 
+# A class that is used to create a screen that will be used to configure the program.
 class ConfigScreen:
     def __init__(self, controller):
         

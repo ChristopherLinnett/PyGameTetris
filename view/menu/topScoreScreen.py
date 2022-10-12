@@ -1,5 +1,6 @@
 import pygame_menu
 
+# It creates a class called HighScoreScreen.
 class HighScoreScreen:
     def __init__(self,controller,score=None):
         self.menu = pygame_menu.Menu(title='High Scores', width=controller.surface.get_width(), height=controller.surface.get_height(), theme=pygame_menu.themes.THEME_DARK)

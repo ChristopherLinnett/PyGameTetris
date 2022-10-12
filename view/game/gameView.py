@@ -1,5 +1,6 @@
 from tkinter import messagebox
 
+# It's a class that draws the game to the screen.
 class GameView():
     def __init__(self,controller,pygame, surface, gridResX,gridResY):
         self.pygame = pygame
@@ -19,6 +20,9 @@ class GameView():
         pygame.display.set_caption('Tetris')
 
 
+    """
+    It draws the play field.
+    """
     def drawPlayField(self):
         sx = self.top_left_x
         sy = self.top_left_y
@@ -32,6 +36,11 @@ class GameView():
 
 
     def drawNextTetronomo(self,tetronomo):
+        """
+        It draws the tetronomo preview.
+        
+        :param tetronomo: the tetronomo object
+        """
         font = self.pygame.font.SysFont('arial', 30)
         label = font.render("Next Shape", 1, (255,255,255))
 
@@ -47,6 +56,11 @@ class GameView():
         self.surface.blit(label, (sx+10, sy-30))
 
     def drawWindow(self, playField):
+        """
+        It draws the window
+        
+        :param playField: The playfield that is being drawn
+        """
         self.surface.fill((0,0,0))
         self.pygame.font.init()
         font = self.pygame.font.SysFont('arial', 60)
@@ -78,6 +92,10 @@ class GameView():
         self.drawPlayField()
 
     def showPopUpBox(self):
+        """
+        It creates a pop-up box that asks the user if they want to quit the game. 
+        If they click yes, the game will quit
+        """
         boxResponse = messagebox.askyesno(
             title="Exit Game?", message="Are you sure you want to quit"
         )

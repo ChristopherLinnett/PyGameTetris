@@ -9,6 +9,7 @@ import pygame
 import random
 
 
+# The GameController class is responsible for managing the game state and the game loop
 class GameController:
     def __init__(self, controller):
         pygame.font.init()
@@ -33,6 +34,10 @@ class GameController:
         self.startGame()  # start game
 
     def freeSpace(self):
+        """
+        It checks if the current tetronomo can move down one space
+        :return: a boolean value.
+        """
         emptySpaces = [
             [(j, i) for j in range(self.width) if self.playField.grid[i][j] == (0, 0, 0)]
             for i in range(self.height)
@@ -46,6 +51,10 @@ class GameController:
         return True
 
     def loseCondition(self):
+        """
+        If any of the filled positions are in the top row, return True
+        :return: The position of the block that is at the top of the playfield.
+        """
         for pos in self.playField.filledPositions:
             x, y = pos
             if y < 1:
@@ -54,6 +63,9 @@ class GameController:
         return False
 
     def startGame(self):
+        """
+        It's a game loop that runs the tetris game until the player loses
+        """
         while self.run:
             self.playField.update()
             if self.pause == False:
