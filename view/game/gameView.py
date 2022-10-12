@@ -72,7 +72,7 @@ class GameView():
         clearedRowsLabel = menuFont.render(f'Cleared Rows: {self.controller.totalClearedRows}', 1, (255,255,255))
 
         levelLabel = menuFont.render(f'level: {self.controller.level}', 1, (255,255,255))
-        modeLabel = menuFont.render('Mode: Player', 1, (255,255,255))
+        modeLabel = menuFont.render(f'Mode: {"Player" if self.controller.aiMode == False else "AI"}', 1, (255,255,255))
         extendedLabel = menuFont.render(f'Extended Mode: {self.controller.extendedMode}', 1, (255,255,255))
 
         self.surface.blit(fontLabel, (0+self.s_width/2 - fontLabel.get_width()/2, 30))

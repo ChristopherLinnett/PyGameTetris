@@ -4,9 +4,10 @@ import model.game.shapesData as sd
 from model.game.grid import PlayField
 import view.menu.topScoreScreen as topScoreScreen
 from view.game.gameView import GameView
-
+from controller.playerController import playerController
 import pygame
 import random
+import controller.aiController as aiController
 
 
 # The GameController class is responsible for managing the game state and the game loop
@@ -20,6 +21,9 @@ class GameController:
         self.level = int(controller.config['startingLevel'])
         self.width = int(controller.config['playfieldSize']['width']) if int(controller.config['playfieldSize']['width']) > 7 else 7
         self.height = int(controller.config['playfieldSize']['height']) if int(controller.config['playfieldSize']['height']) > 10 else 10
+        self.aiMode = controller.config['aiMode']
+        self.ai = aiController.AIController(self, self.width, self.height)
+
         self.gameView = GameView(self, pygame, controller.surface, self.width, self.height)
         self.playField = PlayField(self.width,self.height)
         self.tetroLanded = False
@@ -57,8 +61,7 @@ class GameController:
         """
         for pos in self.playField.filledPositions:
             x, y = pos
-            if y < 1:
-                print(pos)
+            if y < 0:
                 return True
         return False
 
@@ -78,29 +81,12 @@ class GameController:
                 if not (self.freeSpace()) and self.mainTetronomo.y > 0:
                     self.mainTetronomo.y -= 1
                     self.tetroLanded = True
-            for event in pygame.event.get():
+            for event in list(pygame.event.get()):
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-
-                if self.pause == False:
+                if  self.pause == False:
                     if event.type == pygame.KEYDOWN:
-                        if event.key == pygame.K_LEFT:
-                            self.mainTetronomo.x -= 1
-                            if not (self.freeSpace()):
-                                self.mainTetronomo.x += 1
-                        if event.key == pygame.K_RIGHT:
-                            self.mainTetronomo.x += 1
-                            if not (self.freeSpace()):
-                                self.mainTetronomo.x -= 1
-                        if event.key == pygame.K_DOWN:
-                            self.mainTetronomo.y += 1
-                            if not (self.freeSpace()):
-                                self.mainTetronomo.y -= 1
-                        if event.key == pygame.K_UP:
-                            self.mainTetronomo.rotation += 1
-                            if not (self.freeSpace()):
-                                self.mainTetronomo.rotation -= 1
                         if event.key == pygame.K_m:
                             self.controller.audioController.mixer.music.set_volume(0 if float(self.controller.audioController.mixer.music.get_volume()) > 0 else 1)
                         if event.key == pygame.K_ESCAPE:
@@ -111,6 +97,8 @@ class GameController:
                             self.pause = True
                             self.controller.audioController.playSound('pauseGameSound')
                             self.controller.audioController.pauseMusic()
+                        if self.aiMode == False:
+                            playerController(self, event, pygame)
                 else:
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_p:
@@ -129,6 +117,8 @@ class GameController:
                     p = (pos[0], pos[1])
                     self.playField.filledPositions[p] = self.mainTetronomo.colour
                 self.mainTetronomo = self.nextTetronomo
+                if self.aiMode == True:
+                    self.ai.createGhost(self.mainTetronomo.x, self.mainTetronomo.y, self.mainTetronomo.shape, self.mainTetronomo.rotation)
                 self.nextTetronomo = TetronomoFactory.createTetronomo(self.width//2, 0, random.choice(self.possibleShapes))
                 self.tetroLanded = False
                 clearedRows = self.playField.clearRows()
