@@ -76,7 +76,6 @@ class MenuController:
         self.audioController.playSound('saveHighScoreSound')
         self.goToHighScore()
         
-
     def startTheGame(self):
         """
         It starts the game music and then starts the game.
