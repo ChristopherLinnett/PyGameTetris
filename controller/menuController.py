@@ -64,16 +64,15 @@ class MenuController:
         in the dictionary, it adds the current score to the dictionary, and then saves the dictionary to
         a file
         """
-        userList = list(self.highScores.keys())
-        scoreList = list(self.highScores.values())
-        newHighScores = {}
-        for scoreInd in range(0,len(scoreList)):
-                if self.tempHighScore > int(scoreList[scoreInd]):
-                    newHighScores[self.highName] = self.tempHighScore
+
+        newHighScores = []
+        for scoreInd in range(0,len(self.highScores)):
+                if self.tempHighScore > self.highScores[scoreInd]['score']:
+                    newHighScores.append({'name': self.highName, 'score': self.tempHighScore})
                     self.highName = ''
                     self.tempHighScore = 0
-                if len(list(newHighScores.keys())) < 10:
-                    newHighScores[userList[scoreInd]] = scoreList[scoreInd]
+                if len(newHighScores) < 10:
+                    newHighScores.append(self.highScores[scoreInd])
         self.highScoreModel.saveHighScores(newHighScores)
         print('saved High Scores')
         self.highScores = self.highScoreModel.getHighScores()

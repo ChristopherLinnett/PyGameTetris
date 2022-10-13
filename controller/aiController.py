@@ -72,8 +72,8 @@ class AIController:
                     for pos in self.ghostTetro.rotate():
                         if pos[1] > greatesty:
                             greatesty = pos[1]
-                    if self.ghostTetro.y + greatesty > bestScore:
-                        bestScore = self.ghostTetro.y + greatesty
+                    if greatesty > bestScore:
+                        bestScore = greatesty
                         xGoal = self.ghostTetro.x
                         rotationGoal = self.ghostTetro.rotation
         if xGoal != None and rotationGoal != None:
