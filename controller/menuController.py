@@ -11,6 +11,10 @@ import pygame
 # The MenuController class is a class that controls the menu
 class MenuController:
     def __init__(self):
+        """
+        It initializes the game, sets the audio controller, config model, high score model, high scores,
+        temp high score, high name, config, audio controller, new config, surface, and menu
+        """
         pygame.init()
         self.audioController = AudioController()
         self.audioController.startMenuMusic()

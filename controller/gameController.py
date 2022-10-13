@@ -13,6 +13,12 @@ import controller.aiController as aiController
 # The GameController class is responsible for managing the game state and the game loop
 class GameController:
     def __init__(self, controller):
+        """
+        It creates a new game object, which contains a playfield, a main tetronomo, a next tetronomo,
+        and a game view
+        
+        :param controller: The main controller that handles the game
+        """
         pygame.font.init()
         self.controller = controller
         self.extendedMode = controller.config['extendedMode']

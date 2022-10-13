@@ -3,6 +3,17 @@ from tkinter import messagebox
 # It's a class that draws the game to the screen.
 class GameView():
     def __init__(self,controller,pygame, surface, gridResX,gridResY):
+        """
+        It takes in the controller, pygame, surface, gridResX, and gridResY and sets the surface width
+        and height, the grid resolution, the play width and height, the block size, the top left x and
+        y, and the window
+        
+        :param controller: the controller object
+        :param pygame: the pygame module
+        :param surface: the pygame surface
+        :param gridResX: The number of blocks in the x direction
+        :param gridResY: The number of rows in the grid
+        """
         self.pygame = pygame
         self.controller = controller
         self.surface = surface

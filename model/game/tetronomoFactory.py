@@ -2,6 +2,14 @@ from model.game.shapesData import *
 
 class TetronomoFactory(object):
     def createTetronomo(x, y, tetronomoType):
+        """
+        It takes in a string and two integers, and returns a tetronomo shape and its rotation variants
+        
+        :param x: The x coordinate of the top left corner of the tetronomo
+        :param y: The y coordinate of the tetronomo
+        :param tetronomoType: The type of tetronomo to be created
+        :return: a list of lists.
+        """
         if tetronomoType == 'S':
             return shapeS(x, y)
         elif tetronomoType == 'Z':

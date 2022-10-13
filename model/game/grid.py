@@ -1,6 +1,12 @@
 # PlayField is a class that represents the tetris game board.
 class PlayField:
     def __init__(self, width, height):
+        """
+        The function __init__() is a constructor that initializes the class variables
+        
+        :param width: The width of the grid
+        :param height: The height of the grid
+        """
         self.filledPositions = {}
         self.width = width
         self.height = height

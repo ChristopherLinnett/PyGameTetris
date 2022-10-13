@@ -1,8 +1,15 @@
 import pygame_menu
 
-# It creates a class called HighScoreScreen.
+# This class is a screen that displays the high scores.
 class HighScoreScreen:
     def __init__(self,controller,score=None):
+        """
+        It creates a menu with a list of high scores, and if the user has a high score, it asks them to
+        input their name.
+        
+        :param controller: the controller object
+        :param score: the score of the player
+        """
         self.menu = pygame_menu.Menu(title='High Scores', width=controller.surface.get_width(), height=controller.surface.get_height(), theme=pygame_menu.themes.THEME_DARK)
         names = list(controller.highScores.keys())
         self.controller = controller
