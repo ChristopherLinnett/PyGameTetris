@@ -1,6 +1,5 @@
 from types import NoneType
 import copy
-import pygame
 
 # This class is a controller for an AI.
 class AIController:
@@ -14,8 +13,6 @@ class AIController:
         :param height: The height of the screen
         """
         self.controller = controller
-        self.clock = pygame.time.Clock()
-        self.counter = 0
         self.width = width
         self.height = height
         self.bestOutput = None
