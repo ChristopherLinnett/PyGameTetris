@@ -23,13 +23,14 @@ class GameController:
         self.height = int(controller.config['playfieldSize']['height']) if int(controller.config['playfieldSize']['height']) > 10 else 10
         self.aiMode = controller.config['aiMode']
         self.ai = aiController.AIController(self, self.width, self.height)
-
         self.gameView = GameView(self, pygame, controller.surface, self.width, self.height)
         self.playField = PlayField(self.width,self.height)
         self.tetroLanded = False
         self.run = True
         self.totalClearedRows = 0
         self.mainTetronomo = TetronomoFactory.createTetronomo(self.width//2, 0, random.choice(self.possibleShapes))
+        if self.aiMode == True:
+            self.ai.createGhost(self.mainTetronomo.rotation)
         self.nextTetronomo = TetronomoFactory.createTetronomo(self.width//2, 0, random.choice(self.possibleShapes))
         self.clock = pygame.time.Clock()
         self.fallTime = 0
@@ -69,6 +70,7 @@ class GameController:
         """
         It's a game loop that runs the tetris game until the player loses
         """
+        aiCount = 0
         while self.run:
             self.playField.update()
             if self.pause == False:
@@ -77,6 +79,11 @@ class GameController:
 
             if self.fallTime / 1000 > self.fallSpeed:
                 self.fallTime = 0
+                if self.aiMode == True:
+                    aiCount +=1
+                    if aiCount>0:
+                        self.ai.run_ai()
+                        aiCount = 0
                 self.mainTetronomo.y += 1
                 if not (self.freeSpace()) and self.mainTetronomo.y > 0:
                     self.mainTetronomo.y -= 1
@@ -109,7 +116,7 @@ class GameController:
             tetroRotationState = self.mainTetronomo.rotate()
             for i in range(len(tetroRotationState)):
                 x, y = tetroRotationState[i]
-                if y > -1:
+                if y > -1 and x < len(self.playField.grid[y]):
                     self.playField.grid[y][x] = self.mainTetronomo.colour
 
             if self.tetroLanded:
@@ -118,7 +125,7 @@ class GameController:
                     self.playField.filledPositions[p] = self.mainTetronomo.colour
                 self.mainTetronomo = self.nextTetronomo
                 if self.aiMode == True:
-                    self.ai.createGhost(self.mainTetronomo.x, self.mainTetronomo.y, self.mainTetronomo.shape, self.mainTetronomo.rotation)
+                    self.ai.createGhost(self.mainTetronomo.rotation)
                 self.nextTetronomo = TetronomoFactory.createTetronomo(self.width//2, 0, random.choice(self.possibleShapes))
                 self.tetroLanded = False
                 clearedRows = self.playField.clearRows()

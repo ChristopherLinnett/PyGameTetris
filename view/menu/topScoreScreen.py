@@ -9,7 +9,11 @@ class HighScoreScreen:
         for user in names:
             if score and score > int(controller.highScores[user]):
                 self.controller.tempHighScore = score
-                self.addHighScoreInput(score)
+                if self.controller.config['aiMode']==True:
+                    self.controller.modifyHighName('AI')
+                    self.controller.saveHighScore()
+                else:
+                    self.addHighScoreInput(score)
                 score = 0
             self.menu.add.label(f'{names.index(user)+1}    {user}       {controller.highScores[user]}')
         self.menu.add.label(" ")
