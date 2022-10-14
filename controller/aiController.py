@@ -68,12 +68,15 @@ class AIController:
                     while self.freeSpace() or self.ghostTetro.y < 0:
                         self.ghostTetro.y += 1
                     self.ghostTetro.y -= 1
-                    greatesty = 0
+                    greatestbot = 0
+                    greatestTop = self.height
                     for pos in self.ghostTetro.rotate():
-                        if pos[1] > greatesty:
-                            greatesty = pos[1]
-                    if greatesty > bestScore:
-                        bestScore = greatesty
+                        if pos[1] < greatestTop:
+                            greatestTop = pos[1]
+                        if pos[1] > greatestbot:
+                            greatestbot = pos[1]
+                    if greatestbot+self.ghostTetro.y+greatestTop > bestScore:
+                        bestScore = greatestbot+self.ghostTetro.y+greatestTop
                         xGoal = self.ghostTetro.x
                         rotationGoal = self.ghostTetro.rotation
         if xGoal != None and rotationGoal != None:
